@@ -13,8 +13,27 @@ const google = new Scraper({
       },
 });
 
-(async () => {
-    const results = await google.scrape('plane', 25);
+const readline = require('readline');
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
+
+rl.question('Please provide a target and amount (eg: Cats/100) ', (answer) => {
+
+  target = answer.split('/')[0];
+  amount = answer.split('/')[1];
+
+  scrape(target, amount);
+
+  console.log(`Scraping ${amount} images of ${target}(s)`);
+
+  rl.close();
+});
+
+async function scrape(target, amount) {
+    const results = await google.scrape(target, amount);
 
     console.log("Collected " + results.length + " images successfully")
 
@@ -28,9 +47,7 @@ const google = new Scraper({
 
         if(types.includes(extension.split(".")[extension.split('.').length - 1])) download(link, file);
     }
-})();
-
-
+}
 
 
 function download(url, name) {
